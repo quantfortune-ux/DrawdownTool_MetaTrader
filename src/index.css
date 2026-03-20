@@ -1,0 +1,82 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Instrument+Sans:wght@400;500;600;700&display=swap');
+
+:root {
+  --bg-ink: #0e1b22;
+  --bg-sand: #f6f0e6;
+  --bg-mist: #eff4f2;
+  --text-strong: #16222a;
+  --text-muted: #5c6a72;
+  --accent: #d18800;
+  --shadow-xl: 0 26px 90px rgba(16, 22, 27, 0.16);
+
+  font-family: 'Instrument Sans', 'Segoe UI', sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  color: var(--text-strong);
+  background:
+    radial-gradient(circle at top left, rgba(255, 209, 102, 0.2), transparent 28%),
+    radial-gradient(circle at 80% 0%, rgba(17, 89, 94, 0.16), transparent 24%),
+    linear-gradient(180deg, #f9f6ef 0%, #eef3f2 100%);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+h1,
+h2,
+h3 {
+  margin: 0;
+  font-family: 'Space Grotesk', 'Instrument Sans', sans-serif;
+  line-height: 1.05;
+  letter-spacing: -0.04em;
+  color: var(--text-strong);
+}
+
+h1 {
+  font-size: clamp(2.7rem, 5.5vw, 4.8rem);
+  color: #f6fbfb;
+  max-width: 12ch;
+}
+
+h2 {
+  font-size: clamp(1.35rem, 3vw, 2rem);
+}
+
+h3 {
+  font-size: clamp(1.12rem, 2.4vw, 1.4rem);
+}
+
+p {
+  margin: 0;
+  color: var(--text-muted);
+}
+
+a {
+  color: inherit;
+}
+
+button,
+input,
+select,
+textarea {
+  font-family: inherit;
+}
