@@ -5,6 +5,7 @@ import type {
   RecommendationBand,
   RecommendationResult,
   RiskStatus,
+  ScenarioOrderBreakdown,
   ScenarioPoint,
   SimulationCaseResult,
   SimulationInputs,
@@ -92,7 +93,7 @@ function getRetracementPercent(
 
 function computeRecoveryLot(params: {
   currentAsk: number
-  lastOrderOpenPrice: number
+  referenceOrderOpenPrice: number
   orders: GridOrder[]
   instrument: InstrumentProfile
   strategy: StrategyInputs
@@ -100,7 +101,7 @@ function computeRecoveryLot(params: {
 }): number {
   const {
     currentAsk,
-    lastOrderOpenPrice,
+    referenceOrderOpenPrice,
     orders,
     instrument,
     strategy,
@@ -109,8 +110,11 @@ function computeRecoveryLot(params: {
 
   const targetPrice =
     currentAsk +
-    (lastOrderOpenPrice - currentAsk) * (retracementPercent / 100)
-  const targetPoints = Math.abs(targetPrice - currentAsk) / instrument.pointSize
+    (referenceOrderOpenPrice - currentAsk) * (retracementPercent / 100)
+  const targetPoints = round(
+    Math.abs(targetPrice - currentAsk) / instrument.pointSize,
+    0,
+  )
 
   if (targetPoints <= 0 || instrument.tickValuePerLot <= 0) {
     return instrument.minLot
@@ -205,6 +209,20 @@ function buildScenarioPoint(params: {
       (scenarioBidPrice - order.openPrice) / instrument.pointSize
     return sum + directionalPoints * instrument.tickValuePerLot * order.lot
   }, 0)
+  const orderBreakdown: ScenarioOrderBreakdown[] = orders.map((order) => {
+    const directionalPoints =
+      (scenarioBidPrice - order.openPrice) / instrument.pointSize
+
+    return {
+      sequence: order.sequence,
+      openPrice: round(order.openPrice, 4),
+      lot: round(order.lot, 2),
+      floatingPnL: round(
+        directionalPoints * instrument.tickValuePerLot * order.lot,
+        2,
+      ),
+    }
+  })
 
   const usedMargin = orders.reduce((sum, order) => {
     return (
@@ -266,6 +284,7 @@ function buildScenarioPoint(params: {
     haltedByLotCap,
     haltReason,
     status: 'Safe',
+    orderBreakdown,
   }
 
   return {
@@ -356,13 +375,15 @@ export function simulateRiskCase(
 
       const rawRecoveryLot = computeRecoveryLot({
         currentAsk: triggerPrice,
-        lastOrderOpenPrice: lastOrder.openPrice,
+        // The current EA effectively reuses the oldest basket order here
+        // because of how it scans MT5 positions before sizing the next order.
+        referenceOrderOpenPrice: workingOrders[0].openPrice,
         orders: workingOrders,
         instrument: inputs.instrument,
         strategy: inputs.strategy,
         retracementPercent: currentRetracementPercent,
       })
-      const requiredLot = round(rawRecoveryLot, 4)
+      const requiredLot = round(rawRecoveryLot, 2)
       const allowedLot = Math.min(
         inputs.instrument.maxLot,
         inputs.strategy.maxStrategyLot,

@@ -72,6 +72,13 @@ export interface GridOrder {
   retracementPercent: number
 }
 
+export interface ScenarioOrderBreakdown {
+  sequence: number
+  openPrice: number
+  lot: number
+  floatingPnL: number
+}
+
 export interface ScenarioPoint {
   adverseMovePct: number
   scenarioAskPrice: number
@@ -93,6 +100,7 @@ export interface ScenarioPoint {
   haltedByLotCap: boolean
   haltReason: string | null
   status: RiskStatus
+  orderBreakdown: ScenarioOrderBreakdown[]
 }
 
 export interface SimulationCaseResult {

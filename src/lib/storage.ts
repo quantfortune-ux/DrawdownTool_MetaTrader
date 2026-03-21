@@ -2,7 +2,7 @@ import { DEFAULT_INSTRUMENT_PROFILES } from '../data/instruments'
 import type { ClientRecord, InstrumentKey, InstrumentProfile } from '../types'
 
 const CLIENT_STORAGE_KEY = 'riskdesk.clients.v1'
-const PROFILE_STORAGE_KEY = 'riskdesk.instrumentProfiles.v1'
+const PROFILE_STORAGE_KEY = 'riskdesk.instrumentProfiles.v2'
 
 function parseJson<T>(value: string | null, fallback: T): T {
   if (!value) {

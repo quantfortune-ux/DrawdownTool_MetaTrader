@@ -152,7 +152,7 @@ function ScenarioBuilder({
           />
         </label>
         <label>
-          <span>Strategy lot cap</span>
+          <span>Max single order lot</span>
           <input
             type="number"
             min={activeInstrument.minLot}
@@ -326,7 +326,7 @@ function ScenarioBuilder({
         <summary>Instrument assumptions</summary>
         <div className="form-grid form-grid--tight">
           <label>
-            <span>Contract size</span>
+            <span>Contract multiplier</span>
             <input
               type="number"
               min="0.01"
@@ -350,7 +350,7 @@ function ScenarioBuilder({
             />
           </label>
           <label>
-            <span>Tick value per lot</span>
+            <span>USD per point @ 1.00 lot</span>
             <input
               type="number"
               min="0.01"
@@ -362,7 +362,7 @@ function ScenarioBuilder({
             />
           </label>
           <label>
-            <span>Base spread points</span>
+            <span>Base spread (points)</span>
             <input
               type="number"
               min="0"
